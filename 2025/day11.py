@@ -42,6 +42,7 @@ def get_number_of_paths(initial_node):
     return total_paths
 
 # part_1()
+computed_paths = {}
 
 def part_2():
     with open(os.path.join(os.path.dirname(__file__), 'conns.txt'), 'r') as file:
@@ -86,13 +87,19 @@ def part_2():
 
         
 def get_number_of_paths_to_node(initial_node, target_node):
+    if (initial_node.name, target_node.name) in computed_paths:
+        return computed_paths[(initial_node.name, target_node.name)]
+    print(f"Computing paths from {initial_node.name} to {target_node.name}")
     if initial_node == target_node:
+        computed_paths[(initial_node.name, target_node.name)] = 1
         return 1
     if len(initial_node.children) == 0:
+        computed_paths[(initial_node.name, target_node.name)] = 0
         return 0
     total_paths = 0
     for child in initial_node.children:
         total_paths += get_number_of_paths_to_node(child, target_node)
+    computed_paths[(initial_node.name, target_node.name)] = total_paths
     return total_paths
 
 
